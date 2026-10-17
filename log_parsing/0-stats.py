@@ -7,7 +7,7 @@ import sys
 
 STATUS_CODES = ("200", "301", "400", "401", "403", "404", "405", "500")
 LOG_PATTERN = re.compile(
-    r'^\S+ - \[[^\]]+\] "GET /projects/260 HTTP/1\.1" (\d{3}) (\d+)\s*$'
+    r'^\S+ - \[[^\]]+\] "GET /projects/260 HTTP/1\.1"\s+(\d{3})\s+(\d+)\s*$'
 )
 
 
@@ -24,9 +24,11 @@ def main():
     total_size = 0
     status_counts = {code: 0 for code in STATUS_CODES}
     lines_since_report = 0
+    total_lines = 0
 
     try:
         for line in sys.stdin:
+            total_lines += 1
             lines_since_report += 1
             match = LOG_PATTERN.fullmatch(line.rstrip("\n"))
 
@@ -42,7 +44,8 @@ def main():
     except KeyboardInterrupt:
         print_stats(total_size, status_counts)
     else:
-        print_stats(total_size, status_counts)
+        if lines_since_report or total_lines == 0:
+            print_stats(total_size, status_counts)
 
 
 if __name__ == "__main__":
