@@ -7,7 +7,7 @@ import sys
 
 STATUS_CODES = ("200", "301", "400", "401", "403", "404", "405", "500")
 LOG_PATTERN = re.compile(
-    r'^\S+ - \[[^\]]+\] "GET /projects/260 HTTP/1\.1"\s+(\d{3})\s+(\d+)\s*$'
+    r'^\S+ - \[[^\]]+\] "GET /projects/260 HTTP/1\.1"\s+(\S+)\s+(\d+)\s*$'
 )
 
 
@@ -35,6 +35,10 @@ def main():
             if match:
                 status, size = match.groups()
                 total_size += int(size)
+                try:
+                    status = str(int(status))
+                except ValueError:
+                    pass
                 if status in status_counts:
                     status_counts[status] += 1
 
