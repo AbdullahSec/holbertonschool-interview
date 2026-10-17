@@ -42,8 +42,7 @@ def main():
     except KeyboardInterrupt:
         print_stats(total_size, status_counts)
     else:
-        if lines_since_report:
-            print_stats(total_size, status_counts)
+        print_stats(total_size, status_counts)
 
 
 if __name__ == "__main__":
